@@ -19,25 +19,27 @@ import chef1 from './public/chef1.png';
 import chef2 from './public/chef2.png';
 import chef3 from './public/chef3.png';
 import chef4 from './public/chef4.png';
-
+import client from './public/client main.png';
 import ellipse from './public/Ellipse 6.png';
 import quotes from './public/Quotes.png';
-
+import Link from "next/link";
 import restu from './public/restu banner.png';
 import burger2 from './public/burger2.png';
 import icon from './public/Icon.png';
 import pizza from './public/pizza.png';
 import taco from './public/taco.png';
-import { ImageConfigContext } from "next/dist/shared/lib/image-config-context.shared-runtime";
+
+
+
 
 
 export default function Home() {
 
   return (
     <div>
-<div className="max-w-screen-lg mx-auto px-4 md:px-24 pt-8 flex flex-col md:flex-row items-center md:items-start justify-between gap-8 lg:gap-5 ">
+<div className="max-w-screen-lg mx-auto px-4 md:px-24 pt-8 flex flex-col md:flex-row items-center md:items-start justify-between gap-8 lg:gap-10 ">
   {/* Section 1: Its Quick & Amusing */}
-  <div className="text-section text-center md:text-start md:w-1/2 ">
+  <div className="text-section text-center md:text-start md:w-1/2 mb-8 md:mb-0">
     <h1 className="text-[#FF9F0D] font-great-vibes text-4xl">Its Quick & Amusing</h1>
     <p className="text-5xl font-bold mt-4">
       <span className="text-[#FF9F0D]">Th</span>
@@ -48,9 +50,11 @@ export default function Home() {
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi voluptas, et, perferendis iste suscipit ratione commodi.
     </p>
     <div className="pt-5">
+      <Link href={'/menu'}>
       <button className="border-2 bg-[#FF9F0D] text-white w-[190px] h-[60px] rounded-full">
         See Menu
       </button>
+      </Link>
     </div>
   </div>
 
@@ -61,6 +65,7 @@ export default function Home() {
       alt="Hero Image"
       width={877.8}
       height={670}
+      priority={false}
       className="object-cover w-full h-auto max-w-md"
     />
   </div>
@@ -68,7 +73,7 @@ export default function Home() {
 
 <div className="max-w-screen-lg mx-auto px-4 md:px-24 pt-16 flex flex-col md:flex-row items-center md:items-start justify-between gap-8 lg:gap-24">
   {/* Section 2: About Us */}
-  <div className="text-section text-center md:text-start md:w-1/2">
+  <div className="text-section text-center md:text-start md:w-1/2 mb-8 md:mb-0">
     <h1 className="text-[#FF9F0D] font-great-vibes text-4xl">About Us</h1>
     <p className="text-4xl font-bold mt-4">
       <span className="text-[#FF9F0D]">We</span>
@@ -99,9 +104,9 @@ export default function Home() {
   </div>
 
   {/* Right Side: Image Grid */}
-  <div className="md:w-1/2 grid grid-rows-2 grid-cols-2 gap-4 lg:gap-8 mt-8 md:mt-0">
+  <div className="md:w-1/2 grid grid-rows-2 grid-cols-2 gap-8 mt-8 md:mt-0">
     {/* Large Image */}
-    <div className="row-span-1 col-span-2">
+    <div className="row-span-1 col-span-2 mb-4">
       <Image
         src={pic1}
         alt="Large Image"
@@ -109,7 +114,7 @@ export default function Home() {
       />
     </div>
     {/* First Small Image */}
-    <div>
+    <div className="mb-4">
       <Image
         src={pic2}
         alt="Small Image 1"
@@ -117,7 +122,7 @@ export default function Home() {
       />
     </div>
     {/* Second Small Image */}
-    <div>
+    <div className="mb-4">
       <Image
         src={pic3}
         alt="Small Image 2"
@@ -127,62 +132,85 @@ export default function Home() {
   </div>
 </div>
 
-<div className="hidden text-section xl:flex flex-col ml-[300px] mt-28 lg:block">
-       <h1 className="text-[#FF9F0D] pt-0 font-great-vibes text-4xl">Why Choose us</h1>
-       <p className="text-4xl font-bold">
-         <span className="text-[#FF9F0D] text-4xl">Ex</span>
-         
-         <span className="text-white w-[15%] text-4xl">tra Ordinary taste And Experienced</span>
-      </p>
-      <p className="text-white w-[450px] pt-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque diam pellentesque bibendum non dui volutpat fringilla bibendum. Urna, elit augue urna, vitae feugiat pretium donec id elementum. 
-      Ultrices mattis sed vitae mus risus. Lacus nisi, et ac dapibus sit eu velit in consequat.</p>
-      <div className="flex flex-row gap-4">
-      <div className="flex flex-row gap-4 mt-5 space-x-5">
-  <div className="relative w-[102px] h-[100px] bg-[#FF9F0D] flex items-center justify-center border-2">
-    <Image 
-      src={Hamburger} 
-      alt="Hamburger" 
-      width={56} 
-      height={56} 
-    />
-    <p className="absolute -bottom-6 text-white text-center w-full">Fast Food</p>
+<div className="flex flex-col items-center text-center px-4">
+  <h1 className="text-[#FF9F0D] text-3xl md:text-4xl">Food Category</h1>
+  <div className="mt-2">
+    <p className="text-2xl md:text-3xl">
+      <span className="text-[#FF9F0D] text-4xl mr-2">Ch</span>
+      <span className="text-white">oose Food Item</span>
+    </p>
   </div>
-  
-  <div className="relative w-[102px] h-[100px] bg-[#FF9F0D] flex items-center justify-center border-2 ">
-    <Image 
-      src={Cookie} 
-      alt="Cookie" 
-      width={56} 
-      height={56} 
-    />
-    <p className="absolute -bottom-6 text-white text-center w-full">Lunch</p>
-  </div>
-  
-  <div className="relative w-[102px] h-[100px] bg-[#FF9F0D] flex items-center justify-center border-2">
-    <Image 
-      src={Wine} 
-      alt="Wine" 
-      width={56} 
-      height={56} 
-    />
-    <p className="absolute -bottom-6 text-white text-center w-full">Dinner</p>
+
+  {/* Food images */}
+  <div className="flex flex-wrap justify-center gap-5 mt-6">
+    <Image src={mushroom} alt="Mushroom"  />
+    <Image src={burger} alt="Burger" />
+    <Image src={chicken} alt="Chicken"  />
+    <Image src={donut} alt="Donut"  />
   </div>
 </div>
 
-   </div>
-   <div className="flex mt-5">
-  <div className="border-2 bg-white mt-8 w-[374px] h-[93px] flex items-center px-4">
-    <span className="text-[#FF9F0D] text-4xl mr-4">30+</span>
-    <div className="flex flex-col">
-      <span className="text-2xl">Years of</span>
-      <span className="text-2xl font-bold">Experienced</span>
+
+
+
+<div className="flex items-center justify-center min-h-screen bg-black px-4">
+  <div className="text-section flex flex-col items-center text-center max-w-[90%] lg:max-w-[70%]">
+    <h1 className="text-[#FF9F0D] font-great-vibes text-3xl md:text-4xl">
+      Why Choose Us
+    </h1>
+    <p className="text-2xl md:text-4xl font-bold mt-4">
+      <span className="text-[#FF9F0D]">Ex</span>
+      <span className="text-white">tra Ordinary taste And Experienced</span>
+    </p>
+    <p className="text-white text-sm md:text-base lg:text-lg w-full md:w-[450px] pt-5">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque diam pellentesque bibendum non dui volutpat fringilla bibendum. Urna, elit augue urna, vitae feugiat pretium donec id elementum. Ultrices mattis sed vitae mus risus. Lacus nisi, et ac dapibus sit eu velit in consequat.
+    </p>
+    <div className="flex flex-wrap justify-center gap-4 mb-8 mt-6">
+      <div className="relative w-[80px] h-[80px] md:w-[102px] md:h-[100px] bg-[#FF9F0D] flex items-center justify-center border-2">
+        <Image src={Hamburger} alt="Hamburger" width={48} height={48} className="w-12 h-12" />
+        <p className="absolute -bottom-4 md:-bottom-6 text-white text-xs md:text-sm text-center w-full">
+          Fast Food
+        </p>
+      </div>
+      <div className="relative w-[80px] h-[80px] md:w-[102px] md:h-[100px] bg-[#FF9F0D] flex items-center justify-center border-2">
+        <Image src={Cookie} alt="Cookie" width={48} height={48} className="w-12 h-12" />
+        <p className="absolute -bottom-4 md:-bottom-6 text-white text-xs md:text-sm text-center w-full">
+          Lunch
+        </p>
+      </div>
+      <div className="relative w-[80px] h-[80px] md:w-[102px] md:h-[100px] bg-[#FF9F0D] flex items-center justify-center border-2">
+        <Image src={Wine} alt="Wine" width={48} height={48} className="w-12 h-12" />
+        <p className="absolute -bottom-4 md:-bottom-6 text-white text-xs md:text-sm text-center w-full">
+          Dinner
+        </p>
+      </div>
+    </div>
+
+    <div className="flex flex-wrap justify-center gap-4 mt-5 mb-8">
+      <div className="border-2 bg-white w-[250px] h-[80px] md:w-[374px] md:h-[93px] flex items-center px-4">
+        <span className="text-[#FF9F0D] text-2xl md:text-4xl mr-4">30+</span>
+        <div className="flex flex-col">
+          <span className="text-base md:text-2xl">Years of</span>
+          <span className="text-lg md:text-2xl font-bold">Experience</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-  </div>
+<div className="w-full px-4 hidden md:block xl:block">
+  <Image 
+    src={client}
+    alt="Client"
+    className="w-full h-auto object-cover"
+  />
+</div>
+
+
+
+ 
   {/* Menu */ }
-  <div className="text-section text-center mt-20">
+  <div className="text-section text-center mt-5">
   <h1 className="text-[#FF9F0D] font-great-vibes text-4xl">Choose & pick</h1>
   <p className="text-4xl font-bold">
     <span className="text-[#FF9F0D] text-4xl">Fr</span>
@@ -331,7 +359,9 @@ export default function Home() {
 </div>
 
 <div className="flex justify-center items-center my-10 border-2 border-[#FF9F0D] w-[155px] h-[50px] rounded-full text-white mx-auto">
+  <Link href={'/chef'}>
   <button className="text-center">See more</button>
+    </Link>
 </div>
 
 <div className="text-section text-center px-4 md:px-16 lg:px-56 my-10">

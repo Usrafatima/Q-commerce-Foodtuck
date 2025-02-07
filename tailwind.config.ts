@@ -16,7 +16,7 @@ export default {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
-  				DEFAULT: 'hsl(var(--card))',
+  				DEFAULT: 'hsl(var(--card))',    
   				foreground: 'hsl(var(--card-foreground))'
   			},
   			popover: {
@@ -59,10 +59,7 @@ export default {
 				'CustomFont',
 				'sans-serif'
 			],
-			'great-vibes': [
-				'Great Vibes', // Fix the extra quote
-				'cursive'
-			]
+			'great-vibes': ['Great Vibes', 'cursive'],
 		},
   		borderRadius: {
   			lg: 'var(--radius)',
