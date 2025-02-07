@@ -11,7 +11,7 @@ import donut  from './public/donuts.svg';
 import Hamburger from './public/Hamburger.png';
 import Cookie from './public/Cookie.png';
 import Wine from './public/Wine.png';
-
+import main from "./public/mainImage.svg";
 import leaf from './public/leafs.svg';
 import leafplate from './public/leafplate.svg';
 import fryballs from './public/fryballs.svg';
@@ -60,14 +60,16 @@ export default function Home() {
 
   {/* Right Side: Image */}
   <div className="md:w-1/2 flex justify-center">
-    <Image
-      src={hero}
-      alt="Hero Image"
-      width={877.8}
-      height={670}
-      priority={false}
-      className="object-cover w-full h-auto max-w-md"
-    />
+  <Image
+  src={main}
+  alt="Hero Image"
+  width={877.8}
+  height={670}
+  priority={true}
+  layout="responsive"  // Ensures the image scales responsively
+  className="object-cover w-full h-auto max-w-md"
+/>
+
   </div>
 </div>
 

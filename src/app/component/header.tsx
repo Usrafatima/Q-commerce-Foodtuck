@@ -54,9 +54,11 @@ export default function Header() {
   return (
     <div className="bg-black">
       <div className="flex items-center justify-between px-6 py-5 lg:px-40">
+        <Link href={"/"}>
         <p className="text-[#FF9F0D] text-2xl font-bold">
           Food<span className="text-white">tuck</span>
         </p>
+        </Link>
 
         {/* Mobile Navigation */}
         <div className="flex items-center space-x-4 md:hidden">
@@ -82,7 +84,7 @@ export default function Header() {
         </div>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex flex-row space-x-6 text-white">
+        <ul className="hidden md:flex flex-row space-x-6 text-white text-center xl:text-center mt-3">
           {navItems.map((item) => (
             <li key={item.name} className={`relative cursor-pointer ${activePage === item.name ? "font-bold" : ""}`} onClick={() => setActivePage(item.name)}>
               <Link href={item.href}>{item.name}</Link>
@@ -96,7 +98,7 @@ export default function Header() {
         {/* Desktop Icons & Search */}
         <div className="hidden md:flex items-center space-x-6">
           <Searchbar searchQuery={searchQuery} handleSearchChange={handleSearchChange} searchResults={filteredFoods} />
-          <div className="flex gap-5 items-center">
+          <div className="flex gap-5 items-center mt-6">
             {/* ✅ Cart Icon with Count */}
             <Link href="/cart" className="relative">
               <FaShoppingCart className="text-[#FF9F0D] text-2xl" />
@@ -107,7 +109,7 @@ export default function Header() {
               )}
             </Link>
             <Link href="/signin">
-              <FaUser size={24} color="#FF9F0D" />
+              <FaUser size={24} color="#FF9F0D"  />
             </Link>
           </div>
         </div>

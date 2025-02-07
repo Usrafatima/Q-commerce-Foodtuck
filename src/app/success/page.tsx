@@ -10,6 +10,8 @@ import { AiFillHome } from "react-icons/ai"; // ✅ Better Home icon
 import { FcPackage } from "react-icons/fc";
 import { FaShoppingBag } from "react-icons/fa";
 
+import { useCallback } from "react";
+
 const Success = () => {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
@@ -17,10 +19,10 @@ const Success = () => {
   const router = useRouter();
   const { cart, removeFromCart } = useCart();
 
-  // ✅ Function to clear the cart
-  const clearCart = () => {
+  // Use useCallback to memoize clearCart
+  const clearCart = useCallback(() => {
     cart.forEach((item) => removeFromCart(item.id));
-  };
+  }, [cart, removeFromCart]);
 
   useEffect(() => {
     if (!orderNumber && !sessionId) {
@@ -28,7 +30,7 @@ const Success = () => {
     } else {
       clearCart();
     }
-  }, [orderNumber, sessionId]); // ✅ Removed `clearCart` from dependencies to avoid infinite loops
+  }, [orderNumber, sessionId, router, clearCart]);
 
   return (
     <div className="py-10 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">

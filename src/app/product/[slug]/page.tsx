@@ -7,14 +7,20 @@ import { FaHeart, FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-ic
 import Link from "next/link";
 
 import { FaStar, FaRegStar } from "react-icons/fa";
-import ProjectStatus from "@/app/public/Project Status.png"
+import ProjectStatus from "@/app/public/Project Status.png";
 
 type Review = {
   user: string;
   comment: string;
   rating: number; 
 };
-
+  type RelatedItem = {
+  _id: string;
+  name: string;
+  price: number;
+  imageUrl: string;
+  slug: { current: string };
+};
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const query = `*[_type=='food' && slug.current == $slug] {
@@ -23,6 +29,8 @@ const Page = async ({ params }: { params: { slug: string } }) => {
     "reviews": reviews[]{rating, comment, user},
     slug
   }[0]`;
+
+
 
   const food = await client.fetch(query, { slug: params.slug });
 
@@ -44,16 +52,16 @@ const Page = async ({ params }: { params: { slug: string } }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image Section */}
           <div className="flex justify-center overflow-hidden">
-  {food.image && (
-    <Image
-      src={urlFor(food.image).url()}
-      alt={food.name}
-      width={500}
-      height={500}
-      className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-md mt-20"
-    />
-  )}
-</div>
+            {food.image && (
+              <Image
+                src={urlFor(food.image).url()}
+                alt={food.name}
+                width={500}
+                height={500}
+                className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-md mt-20"
+              />
+            )}
+          </div>
 
           {/* Food Details Section */}
           <div>
@@ -125,62 +133,61 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           </div>
         </div>
 
-        
-<div>
-  <h2 className="text-2xl font-bold mt-8">Customer Reviews</h2>
-  {food.reviews?.length > 0 ? (
-    <div className="mt-4">
-      {food.reviews.map((review: Review, index: number) => (
-        <div key={index} className="border-b-2 py-4 w-1/2">
-          <div className="flex items-center">
-            <p className="font-semibold mr-2">{review.user}</p>
-            <div className="flex">
-              {Array.from({ length: 5 }).map((_, i) => 
-                i < review.rating ? (
-                  <FaStar key={i} className="text-yellow-500" />
-                ) : (
-                  <FaRegStar key={i} className="text-gray-400" />
-                )
-              )}
-            </div>
-          </div>
-          <p className="text-gray-600 mt-2">{review.comment}</p>
-        </div>
-      ))}
-    </div>
-  ) : (
-    <p className="text-gray-600">No reviews yet. Be the first to review!</p>
-  )}
-</div>
-
-        {/* Related Items Section */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold">Related Items</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
-            {relatedItems.length > 0 ? (
-              relatedItems.map((item: any) => (
-                <div key={item._id} className="border p-4 rounded-lg shadow-md">
-                  <Link href={`/product/${item.slug.current}`}>
-                    <Image
-                      src={item.imageUrl || "/default-image.jpeg"}
-                      alt={item.name}
-                      width={300}
-                      height={300}
-                      className="w-full h-48 object-cover rounded-md"
-                    />
-                    <h3 className="text-xl font-semibold mt-3">{item.name}</h3>
-                    <p className="text-gray-600">${item.price}</p>
-                  </Link>
+        {/* Customer Reviews Section */}
+        <div>
+          <h2 className="text-2xl font-bold mt-8">Customer Reviews</h2>
+          {food.reviews?.length > 0 ? (
+            <div className="mt-4">
+              {food.reviews.map((review: Review, index: number) => (
+                <div key={index} className="border-b-2 py-4 w-1/2">
+                  <div className="flex items-center">
+                    <p className="font-semibold mr-2">{review.user}</p>
+                    <div className="flex">
+                      {Array.from({ length: 5 }).map((_, i) => 
+                        i < review.rating ? (
+                          <FaStar key={i} className="text-yellow-500" />
+                        ) : (
+                          <FaRegStar key={i} className="text-gray-400" />
+                        )
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-gray-600 mt-2">{review.comment}</p>
                 </div>
-              ))
-            ) : (
-              <p>No related items found.</p>
-            )}
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-600">No reviews yet. Be the first to review!</p>
+          )}
+        </div>
+        {relatedItems.length > 0 ? (
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    {relatedItems.map((item: RelatedItem) => (
+      <div key={item._id} className="border p-3 rounded-lg shadow-md">
+        <Link href={`/product/${item.slug.current}`}>
+          <Image
+            src={item.imageUrl || "/default-image.jpeg"}
+            alt={item.name}
+            width={200}
+            height={200}
+            className="w-full h-36 sm:h-40 md:h-48 object-cover rounded-md"
+          />
+          <h3 className="text-lg font-semibold mt-2">{item.name}</h3>
+          <p className="text-gray-600 text-sm">${item.price}</p>
+        </Link>
+      </div>
+    ))}
+  </div>
+) : (
+  <p>No related items found.</p>
+)}
+
+
+
+
           </div>
         </div>
-      </div>
-    </div>
-  
+     
   );
 };
 

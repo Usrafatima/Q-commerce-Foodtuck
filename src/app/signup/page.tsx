@@ -1,14 +1,11 @@
-'use client'
-import { useState } from 'react';
+'use client';
+import { FormEvent, MouseEvent, useState } from 'react';
 import Link from 'next/link';
 import { LuUserRound } from 'react-icons/lu';
 import { MdOutlineMail } from 'react-icons/md';
 import { TbLockPassword } from 'react-icons/tb';
 import { FcGoogle } from 'react-icons/fc';
 import { FaApple } from 'react-icons/fa';
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { auth } from '@/app/Firebase/config';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 export default function SignUpPage() {
   const [name, setName] = useState('');
@@ -16,30 +13,17 @@ export default function SignUpPage() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
-  const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth);
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    // Add your sign-up logic here (e.g., call API to register the user)
+    console.log({ name, email, password, rememberMe });
+  }
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    try {
-      const res = await createUserWithEmailAndPassword(email, password);
-      console.log('User Created:', res?.user);
-      setEmail('');
-      setPassword('');
-    } catch (e: any) {
-      console.error('Sign Up Error:', e.message);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider); // ✅ Use popup-based login
-      console.log('Google User:', result.user);
-    } catch (e: any) {
-      console.error('Google Sign-In Error:', e.message);
-      alert(`Error: ${e.message}`);
-    }
-  };
+  function handleGoogleSignIn(event: MouseEvent<HTMLButtonElement>): void {
+    event.preventDefault();
+    // Add Google sign-in logic here
+    console.log('Sign in with Google');
+  }
 
   return (
     <div className="min-h-screen bg-white">

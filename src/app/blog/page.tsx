@@ -24,7 +24,7 @@ import youtube from '../public/youtube.png';
 import pintest from '../public/pintest.png';
 import insta2 from '../public/insta2.png';
 import facebook from '../public/facebook.png';
-import pagination from '../public/pagination.png';
+
 import blog2 from '../public/blog2.png';
 import blog3 from '../public/blog3.png';
 import blog4 from '../public/blog4.png';
