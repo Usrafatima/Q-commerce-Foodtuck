@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { client } from "@/sanity/lib/client"; // Sanity client
-import Searchbar from "@/app/component/Searchbar"; // Correct casing
+import { client } from "@/sanity/lib/client";
+import Searchbar from "@/app/component/Searchbar";
+
+interface FoodItem {
+  name: string;
+  category: string;
+  description?: string; // Optional description
+  price: number;
+  slug: string; // Added slug
+}
+
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [foodItems, setFoodItems] = useState<any[]>([]); // Food data
-  const [searchResults, setSearchResults] = useState<any[]>([]); // Filtered results
+  const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
+  const [searchResults, setSearchResults] = useState<FoodItem[]>([]);
 
-  // Fetch food data from Sanity
   useEffect(() => {
     const fetchFoodData = async () => {
       try {
-        const data = await client.fetch('*[_type == "food"]{name, category, description, price}');
+        const data: FoodItem[] = await client.fetch(
+          '*[_type == "food"]{name, category, description, price}'
+        );
         setFoodItems(data);
       } catch (error) {
         console.error("Error fetching food items from Sanity:", error);
@@ -21,27 +31,24 @@ const App = () => {
     fetchFoodData();
   }, []);
 
-  // Handle search query change
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
 
-    const filteredResults = foodItems.filter((food) =>
-      food.name.toLowerCase().includes(query.toLowerCase()) ||
-      food.category.toLowerCase().includes(query.toLowerCase())
+    const filteredResults = foodItems.filter(
+      (food) =>
+        food.name.toLowerCase().includes(query.toLowerCase()) ||
+        food.category.toLowerCase().includes(query.toLowerCase())
     );
     setSearchResults(filteredResults);
   };
 
   return (
     <div>
-      {/* Search Bar Component with Results */}
       <Searchbar
         searchQuery={searchQuery}
         handleSearchChange={handleSearchChange}
-        searchResults={searchResults} // Only pass the results here
+        searchResults={searchResults}
       />
-      
-      {/* No need to render FoodList here anymore */}
     </div>
   );
 };
