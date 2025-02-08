@@ -9,9 +9,7 @@ import Link from "next/link";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import ProjectStatus from "@/app/public/Project Status.png";
 
-type Props = {
-  params: Promise<{ slug: string }>;
-};
+
 
 type Review = {
   user: string;
