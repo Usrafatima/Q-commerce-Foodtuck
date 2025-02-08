@@ -7,7 +7,11 @@ type FoodItem = {
   description: string;
 };
 
-export default async function CategoryPage({ params }: { params: { category: string } }) {
+interface CategoryPageProps {
+  params: { category: string };
+}
+
+export default async function CategoryPage({ params }: CategoryPageProps) {
   console.log("Params:", params);
 
   if (!params?.category || typeof params.category !== "string") {
@@ -44,3 +48,4 @@ export default async function CategoryPage({ params }: { params: { category: str
     return <p>Error fetching data for this category.</p>;
   }
 }
+
