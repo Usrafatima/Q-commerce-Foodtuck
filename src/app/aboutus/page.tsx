@@ -222,8 +222,8 @@ export default function About() {
 
       {/* Testimonial Text */}
       <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque diam
-        pellentesque bibendum non dui volutpat fringilla bibendum."
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque diam
+        pellentesque bibendum non dui volutpat fringilla bibendum.
       </p>
 
       {/* Client Info */}
