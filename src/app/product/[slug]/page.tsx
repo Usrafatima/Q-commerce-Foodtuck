@@ -27,7 +27,7 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
- 
+  
   const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
@@ -51,7 +51,8 @@ const Page = async ({ params }: PageProps) => {
     ? food.reviews.reduce((acc: number, review: { rating: number }) => acc + review.rating, 0) / food.reviews.length
     : 0;
 
- <div className="bg-white">
+  return (
+    <div className="bg-white">
       <div className="container mx-auto px-4 lg:px-16 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image Section */}
@@ -185,8 +186,9 @@ const Page = async ({ params }: PageProps) => {
 ) : (
   <p>No related items found.</p>
 )}
- </div>
-     </div>
+
+</div>
+  </div>
      
   );
 };
