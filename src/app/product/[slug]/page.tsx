@@ -3,14 +3,19 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import AddToCartButton from "@/app/component/AddToCartButton/AddToCartButton";
 import Counter from "@/app/component/counter";
-import { FaHeart, FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaStar, FaRegStar } from "react-icons/fa";
+import { FaHeart, FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import Link from "next/link";
 
-// Remove any custom PageProps import or definition
+import { FaStar, FaRegStar } from "react-icons/fa";
+import ProjectStatus from "@/app/public/Project Status.png";
+
+
+
+// Define additional types
 type Review = {
   user: string;
   comment: string;
-  rating: number;
+  rating: number; 
 };
 
 type RelatedItem = {
@@ -20,7 +25,8 @@ type RelatedItem = {
   imageUrl: string;
   slug: { current: string };
 };
-// Define your component using inline types for props:
+
+// Use inline type for the parameter to match Next.js's expectations
 export default async function Page({ params }: { params: { slug: string } }) {
   const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
@@ -30,22 +36,21 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }[0]`;
 
   const food = await client.fetch(query, { slug: params.slug });
-  if (!food)
+  if (!food) {
     return <div className="text-center text-red-500">Product not found</div>;
+  }
 
   const relatedItemsQuery = `*[_type == 'food' && category == $category && slug.current != $slug] {
     _id, name, price, image, "imageUrl": image.asset->url, slug
   }`;
+
   const relatedItems = await client.fetch(relatedItemsQuery, {
     category: food.category,
     slug: food.slug.current,
   });
 
   const averageRating = food.reviews?.length
-    ? food.reviews.reduce(
-        (acc: number, review: { rating: number }) => acc + review.rating,
-        0
-      ) / food.reviews.length
+    ? food.reviews.reduce((acc: number, review: { rating: number }) => acc + review.rating, 0) / food.reviews.length
     : 0;
 
   return (
@@ -60,7 +65,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 alt={food.name}
                 width={500}
                 height={500}
-                className="w-full max-w-md mt-20"
+                className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-md mt-20"
               />
             )}
           </div>
@@ -80,11 +85,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
               {Array.from({ length: 5 }, (_, index) => (
                 <span
                   key={index}
-                  className={
-                    index < Math.round(averageRating)
-                      ? "text-yellow-500"
-                      : "text-gray-300"
-                  }
+                  className={index < Math.round(averageRating) ? "text-yellow-500" : "text-gray-300"}
                 >
                   ★
                 </span>
@@ -111,13 +112,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
               <FaHeart className="mt-1 text-[#4F4F4F]" />
               <p className="text-[#4F4F4F]">Add To Wishlist</p>
               <div className="flex flex-row gap-2">
-                {/* Using a direct image path from public folder */}
-                <Image
-                  src={Project}
-                 alt="Project Status"
-                  width={50}
-                  height={50}
-                />
+                <Image src={ProjectStatus} alt="Project Status" className="mt-1" />
                 <p className="text-[#4F4F4F]">Compare</p>
               </div>
             </div>
@@ -169,15 +164,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
               ))}
             </div>
           ) : (
-            <p className="text-gray-600">
-              No reviews yet. Be the first to review!
-            </p>
+            <p className="text-gray-600">No reviews yet. Be the first to review!</p>
           )}
         </div>
 
         {/* Related Items Section */}
         {relatedItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {relatedItems.map((item: RelatedItem) => (
               <div key={item._id} className="border p-3 rounded-lg shadow-md">
                 <Link href={`/product/${item.slug.current}`}>
@@ -189,17 +182,16 @@ export default async function Page({ params }: { params: { slug: string } }) {
                     className="w-full h-36 sm:h-40 md:h-48 object-cover rounded-md"
                   />
                   <h3 className="text-lg font-semibold mt-2">{item.name}</h3>
-                  <p className="text-gray-600 text-sm">Rs {item.price}</p>
+                  <p className="text-gray-600 text-sm">${item.price}</p>
                 </Link>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-gray-600 mt-4">No related items found.</p>
+          <p>No related items found.</p>
         )}
       </div>
     </div>
   );
 }
-
 
