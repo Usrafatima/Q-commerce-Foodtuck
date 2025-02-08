@@ -9,7 +9,6 @@ import Link from "next/link";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import ProjectStatus from "@/app/public/Project Status.png";
 
-// Define the type for props
 type Props = {
   params: Promise<{ slug: string }>;
 };
@@ -29,6 +28,7 @@ type RelatedItem = {
 };
 
 const Page = async ({ params }: { params: { slug: string } }) => {
+
 const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
