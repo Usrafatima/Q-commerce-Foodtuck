@@ -9,6 +9,8 @@ import Link from "next/link";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import ProjectStatus from "@/app/public/Project Status.png";
 
+import { GetServerSideProps } from "next";
+
 type Review = {
   user: string;
   comment: string;
@@ -22,15 +24,19 @@ type Review = {
   slug: { current: string };
 };
 
-const Page = async ({ params }: { params: { slug: string } }) => {
+type PageProps = {
+  params: {
+    slug: string;
+  };
+};
+
+const Page = async ({ params }: PageProps) => {
   const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
     "reviews": reviews[]{rating, comment, user},
     slug
   }[0]`;
-
-
 
   const food = await client.fetch(query, { slug: params.slug });
 
@@ -159,8 +165,8 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           ) : (
             <p className="text-gray-600">No reviews yet. Be the first to review!</p>
           )}
-        </div>
-        {relatedItems.length > 0 ? (
+          </div>
+              {relatedItems.length > 0 ? (
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     {relatedItems.map((item: RelatedItem) => (
       <div key={item._id} className="border p-3 rounded-lg shadow-md">
@@ -181,13 +187,8 @@ const Page = async ({ params }: { params: { slug: string } }) => {
 ) : (
   <p>No related items found.</p>
 )}
-
-
-
-
-          </div>
-        </div>
-     
+      </div>
+    </div>
   );
 };
 
