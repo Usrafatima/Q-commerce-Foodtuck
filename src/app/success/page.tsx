@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/app/context/CartContext"; // ✅ Correct import
 import { motion } from "framer-motion";
@@ -10,14 +10,13 @@ import { AiFillHome } from "react-icons/ai"; // ✅ Better Home icon
 import { FcPackage } from "react-icons/fc";
 import { FaShoppingBag } from "react-icons/fa";
 
-import { useCallback } from "react";
-
 const Success = () => {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const sessionId = searchParams.get("session_id");
   const router = useRouter();
   const { cart, removeFromCart } = useCart();
+  const [loading, setLoading] = useState(true); // For loading state
 
   // Use useCallback to memoize clearCart
   const clearCart = useCallback(() => {
@@ -25,12 +24,20 @@ const Success = () => {
   }, [cart, removeFromCart]);
 
   useEffect(() => {
-    if (!orderNumber && !sessionId) {
-      router.push("/");
+    if (!orderNumber || !sessionId) {
+      console.error("Missing order details");
+      router.push("/"); // Redirect if order info is missing
     } else {
       clearCart();
+      setLoading(false); // Once data is valid, stop loading
     }
   }, [orderNumber, sessionId, router, clearCart]);
+
+  if (loading) {
+    return (
+      <div className="py-10 flex items-center justify-center">Loading...</div> // Show loading indicator
+    );
+  }
 
   return (
     <div className="py-10 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
@@ -55,7 +62,7 @@ const Success = () => {
 
         {/* ✅ Order Details */}
         <p className="text-gray-700">
-          Thank you for your order. We&apos;re processing it and will ship it soon.  
+          Thank you for your order. We&apos;re processing it and will ship it soon.
           A confirmation email with your order details will be sent shortly.
         </p>
 
@@ -98,3 +105,4 @@ const Success = () => {
 };
 
 export default Success;
+
