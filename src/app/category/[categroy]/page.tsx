@@ -1,4 +1,5 @@
-import { client } from '@/sanity/lib/client';
+import { client } from "@/sanity/lib/client";
+import { GetServerSideProps } from "next";
 
 type FoodItem = {
   _id: string;
@@ -7,17 +8,19 @@ type FoodItem = {
   description: string;
 };
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: { category: string };
-}) {
-  console.log('Params:', params); // Debugging the received params
+interface CategoryPageProps {
+  params: {
+    category: string;
+  };
+}
 
-  const { category } = params;
+// ✅ Fix: Ensure correct type for params
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  console.log("Params:", params); // Debugging the received params
 
-  // Make sure category is a valid string
-  if (!category || typeof category !== 'string') {
+  const category = params?.category;
+
+  if (!category || typeof category !== "string") {
     return <p>Invalid category parameter.</p>;
   }
 
@@ -28,7 +31,6 @@ export default async function CategoryPage({
     description
   }`;
 
-  // Fetch data based on the category parameter
   try {
     const foods: FoodItem[] = await client.fetch(query, { category });
 
@@ -48,7 +50,8 @@ export default async function CategoryPage({
       </div>
     );
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
     return <p>Error fetching data for this category.</p>;
   }
 }
+
