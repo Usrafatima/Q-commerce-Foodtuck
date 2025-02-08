@@ -10,7 +10,7 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import ProjectStatus from "@/app/public/Project Status.png";
 
 
-pe Review = {
+type Review = {
   user: string;
   comment: string;
   rating: number; 
