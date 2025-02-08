@@ -51,8 +51,7 @@ const Page = async ({ params }: PageProps) => {
     ? food.reviews.reduce((acc: number, review: { rating: number }) => acc + review.rating, 0) / food.reviews.length
     : 0;
 
-  return (
-    <div className="bg-white">
+ <div className="bg-white">
       <div className="container mx-auto px-4 lg:px-16 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image Section */}
@@ -63,7 +62,7 @@ const Page = async ({ params }: PageProps) => {
                 alt={food.name}
                 width={500}
                 height={500}
-                className="w-full max-w-md mt-20"
+                className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-md mt-20"
               />
             )}
           </div>
@@ -81,7 +80,10 @@ const Page = async ({ params }: PageProps) => {
             <p className="text-3xl font-bold mt-2">Rs {food.price}</p>
             <div className="flex items-center gap-2 mt-2">
               {Array.from({ length: 5 }, (_, index) => (
-                <span key={index} className={index < Math.round(averageRating) ? "text-yellow-500" : "text-gray-300"}>
+                <span
+                  key={index}
+                  className={index < Math.round(averageRating) ? "text-yellow-500" : "text-gray-300"}
+                >
                   ★
                 </span>
               ))}
@@ -107,7 +109,7 @@ const Page = async ({ params }: PageProps) => {
               <FaHeart className="mt-1 text-[#4F4F4F]" />
               <p className="text-[#4F4F4F]">Add To Wishlist</p>
               <div className="flex flex-row gap-2">
-                <Image src="{Project} alt="Project Status" width={50} height={50} />
+                <Image src={ProjectStatus} alt="Project Status" className="mt-1 text-[#4F4F4F]" />
                 <p className="text-[#4F4F4F]">Compare</p>
               </div>
             </div>
@@ -162,33 +164,31 @@ const Page = async ({ params }: PageProps) => {
             <p className="text-gray-600">No reviews yet. Be the first to review!</p>
           )}
         </div>
-
-        {/* Related Items Section */}
         {relatedItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-            {relatedItems.map((item: RelatedItem) => (
-              <div key={item._id} className="border p-3 rounded-lg shadow-md">
-                <Link href={`/product/${item.slug.current}`}>
-                  <Image
-                    src={item.imageUrl || "/default-image.jpeg"}
-                    alt={item.name}
-                    width={200}
-                    height={200}
-                    className="w-full h-36 sm:h-40 md:h-48 object-cover rounded-md"
-                  />
-                  <h3 className="text-lg font-semibold mt-2">{item.name}</h3>
-                  <p className="text-gray-600 text-sm">Rs {item.price}</p>
-                </Link>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-600 mt-4">No related items found.</p>
-        )}
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    {relatedItems.map((item: RelatedItem) => (
+      <div key={item._id} className="border p-3 rounded-lg shadow-md">
+        <Link href={`/product/${item.slug.current}`}>
+          <Image
+            src={item.imageUrl || "/default-image.jpeg"}
+            alt={item.name}
+            width={200}
+            height={200}
+            className="w-full h-36 sm:h-40 md:h-48 object-cover rounded-md"
+          />
+          <h3 className="text-lg font-semibold mt-2">{item.name}</h3>
+          <p className="text-gray-600 text-sm">${item.price}</p>
+        </Link>
       </div>
-    </div>
+    ))}
+  </div>
+) : (
+  <p>No related items found.</p>
+)}
+ </div>
+     </div>
+     
   );
 };
 
 export default Page;
-
