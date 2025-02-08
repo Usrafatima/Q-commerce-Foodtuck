@@ -1,11 +1,10 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import AddToCartButton from "../component/AddToCartButton/AddToCartButton";
 import Image from "next/image";
 import client from "@/sanity/lib/client";
-import CategoryBox from "@/app/component/categorybox";
-
+import Link from "next/link";
 
 interface FoodItem {
   _id: string;
@@ -14,15 +13,12 @@ interface FoodItem {
   description: string;
   tags: string[];
   available: boolean;
-  category: string | string[];
   imageUrl: string;
   slug: string;
 }
 
 const Shop = () => {
-   const [foods, setFoods] = useState<FoodItem[]>([]);
-  const [filteredFoods, setFilteredFoods] = useState<FoodItem[]>([]);
-const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [foods, setFoods] = useState<FoodItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,15 +32,12 @@ const [selectedCategory, setSelectedCategory] = useState<string>("All");
           description,
           tags,
           available,
-          category,
-          
           "imageUrl": image.asset->url,
           "slug": slug.current
         }`;
-        
-        const data = await client.fetch(query);
+
+        const data: FoodItem[] = await client.fetch(query);
         setFoods(data);
-        setFilteredFoods(data); 
       } catch (err) {
         setError("Failed to fetch food items.");
         console.error(err);
@@ -56,70 +49,57 @@ const [selectedCategory, setSelectedCategory] = useState<string>("All");
     fetchFoods();
   }, []);
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+  if (foods.length === 0) return <p>No foods available.</p>;
+
+  // ✅ Define filteredFoods before rendering
+  const filteredFoods = foods.filter((food) => food.available);
+
   return (
     <div className="bg-white p-6 mt-5">
-     
       <h1 className="text-2xl font-bold mb-6 text-center">Food</h1>
 
-      {loading && <p>Loading food items...</p>}
-      {error && <p className="text-red-600">{error}</p>}
-      {filteredFoods.length === 0 && !loading && <p className="text-center">No items found.</p>}
+      {filteredFoods.length === 0 && <p className="text-center">No items found.</p>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredFoods.map((food) => (
+        {filteredFoods.map((food: FoodItem) => (
           <div key={food._id} className="bg-gray-100 shadow-lg p-4 flex flex-col items-center h-full">
             <Link href={`/food/${food.slug}`} className="text-center">
               <Image src={food.imageUrl} alt={food.name} width={400} height={200} className="rounded-lg" />
               <h2 className="text-lg font-semibold text-gray-800 mt-4">{food.name}</h2>
             </Link>
-             
-  
-           
+
             <p className="text-black text-lg font-bold mt-1">Rs {food.price}</p>
-          
-          
-            <p className="text-black text-xs mt-2">{food.tags}</p>
+            <p className="text-black text-xs mt-2">{food.tags.join(", ")}</p>
             <p className="text-gray-700 text-sm mt-2">{food.description}</p>
             <p className={`text-sm font-medium mt-3 ${food.available ? "text-green-600" : "text-red-600"}`}>
               {food.available ? "Available" : "Not Available"}
             </p>
-            <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 w-full">
-            <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 w-full">
+
             <div className="flex flex-col sm:flex-row gap-4 items-center w-full mt-4">
-  {/* View Detail Button */}
-  <div className="flex flex-col sm:flex-row gap-4 items-center w-full mt-4">
-  {/* View Detail Button */}
-  <Link href={`/product/${food.slug}`} className="w-full sm:w-auto">
-    <button className="w-full sm:w-[130px] text-center h-[40px] bg-[#008080] text-white shadow-md hover:scale-105 transition-all duration-300 ease-in-out active:scale-95 rounded-md">
-      View Detail
-    </button>
-  </Link>
+              <Link href={`/product/${food.slug}`} className="w-full sm:w-auto">
+                <button className="w-full sm:w-[130px] text-center h-[40px] bg-[#008080] text-white shadow-md hover:scale-105 transition-all duration-300 ease-in-out active:scale-95 rounded-md">
+                  View Detail
+                </button>
+              </Link>
 
-  {/* Add to Cart Button */}
-  <div className="w-full sm:w-auto flex justify-center">
-    <AddToCartButton 
-      food={{
-        id: food._id,
-        name: food.name,
-        price: food.price,
-        image: food.imageUrl || "/default-image.jpeg",
-      }}
-    />
-  </div>
-</div>
-</div>
-
-
-</div>
-</div>
-
+              <div className="w-full sm:w-auto flex justify-center">
+                <AddToCartButton 
+                  food={{
+                    id: food._id,
+                    name: food.name,
+                    price: food.price,
+                    image: food.imageUrl || "/default-image.jpeg",
+                  }}
+                />
+              </div>
+            </div>
           </div>
         ))}
       </div>
     </div>
-    
   );
-
 };
 
 export default Shop;
