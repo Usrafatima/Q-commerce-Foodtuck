@@ -107,7 +107,7 @@ const Page = async ({ params }: PageProps) => {
               <FaHeart className="mt-1 text-[#4F4F4F]" />
               <p className="text-[#4F4F4F]">Add To Wishlist</p>
               <div className="flex flex-row gap-2">
-                <Image src="/Project Status.png" alt="Project Status" width={50} height={50} />
+                <Image src="{Project} alt="Project Status" width={50} height={50} />
                 <p className="text-[#4F4F4F]">Compare</p>
               </div>
             </div>
