@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/app/context/CartContext"; // ✅ Correct import
@@ -9,8 +7,9 @@ import Link from "next/link";
 import { AiFillHome } from "react-icons/ai"; // ✅ Better Home icon
 import { FcPackage } from "react-icons/fc";
 import { FaShoppingBag } from "react-icons/fa";
+import { Suspense } from "react";
 
-const Success = () => {
+const SuccessPage = () => {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const sessionId = searchParams.get("session_id");
@@ -104,5 +103,11 @@ const Success = () => {
   );
 };
 
-export default Success;
+export default function Success() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SuccessPage />
+    </Suspense>
+  );
+}
 
