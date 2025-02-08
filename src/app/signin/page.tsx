@@ -48,7 +48,7 @@ export default function SignInPage() {
             </div>
             <button type="submit" className="w-full py-2 text-white bg-[#ff9f0d] hover:bg-orange-600">Sign In</button>
             <div className="flex items-center justify-end">
-              <Link href="/signup" className="text-sm text-gray-600 hover:text-[#ff9f0d] hover:underline">Don't have an account? Sign Up</Link>
+              <Link href="/signup" className="text-sm text-gray-600 hover:text-[#ff9f0d] hover:underline">Dont have an account? Sign Up</Link>
             </div>
           </form>
 
