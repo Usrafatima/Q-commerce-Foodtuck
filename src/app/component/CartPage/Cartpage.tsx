@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCart } from "../../../app/context/CartContext";
-import Link from "next/link";
+
 import menu from "@/app/public/menu.png";
 import { useState } from "react";
 import { createCheckoutSession, Metadata } from "./actions/createCheckoutSession";
@@ -17,7 +17,7 @@ const CartPage = () => {
   const formatCurrency = (amount: number) => `Rs ${amount.toFixed(2)}`;
 
   const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  const grandTotal = subtotal.toFixed(2);
+
 
   const handleCheckout = async () => {
     setShowModal(true); 
