@@ -1,6 +1,6 @@
 import type { Rule } from "sanity"; // Import Rule type
 
-export default {
+const foodSchema = {
   name: "food",
   type: "document",
   title: "Food",
@@ -18,21 +18,7 @@ export default {
         source: "name",
       },
     },
-    {
-      name: "category",
-      type: "string",
-      title: "Category",
-      description: "Category of the food item (e.g., Desi, Chinese, Fast Food, Drinks)",
-      options: {
-        list: [
-          { title: "Desi", value: "desi" },
-          { title: "Chinese", value: "chinese" },
-          { title: "Fast Food", value: "fastfood" },
-          { title: "Drinks", value: "drinks" },
-        ],
-      },
-    },
-    {
+     {
       name: "price",
       type: "number",
       title: "Current Price",
@@ -85,7 +71,7 @@ export default {
               name: "rating",
               type: "number",
               title: "Rating (1-5)",
-              validation: (Rule: Rule) => Rule.min(1).max(5), // Correct type usage
+              validation: (Rule: Rule) => Rule.min(1).max(5),
             },
             {
               name: "comment",
@@ -103,3 +89,6 @@ export default {
     },
   ],
 };
+
+export default foodSchema;
+
