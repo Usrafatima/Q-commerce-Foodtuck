@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/app/context/CartContext"; // ✅ Correct import
