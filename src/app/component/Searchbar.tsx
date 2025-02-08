@@ -10,7 +10,7 @@ interface SearchBarProps {
   searchResults: { name: string; category: string; description?: string; price: number; slug: string }[]; // Ensure the search result includes slug
 }
 
-const Searchbar: React.FC<SearchBarProps> = ({ searchQuery, handleSearchChange, searchResults }) => {
+const Searchbar: React.FC<SearchBarProps> = ({ searchQuery, handleSearchChange,  }) => {
   const [inputValue, setInputValue] = useState(searchQuery);
   const [foods, setFoods] = useState<{ name: string; category: string; description?: string; price: number; slug: string }[]>([]);
 
