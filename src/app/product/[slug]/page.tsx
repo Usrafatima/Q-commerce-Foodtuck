@@ -9,12 +9,18 @@ import Link from "next/link";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import ProjectStatus from "@/app/public/Project Status.png";
 
+// Define the type for props
+type Props = {
+  params: { slug: string };
+};
+
 type Review = {
   user: string;
   comment: string;
-  rating: number; 
+  rating: number;
 };
-  type RelatedItem = {
+
+type RelatedItem = {
   _id: string;
   name: string;
   price: number;
@@ -22,15 +28,13 @@ type Review = {
   slug: { current: string };
 };
 
-const Page = async ({ params }: { params: { slug: string } }) => {
+const Page = async ({ params }: Props) => {
   const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
     "reviews": reviews[]{rating, comment, user},
     slug
   }[0]`;
-
-
 
   const food = await client.fetch(query, { slug: params.slug });
 
