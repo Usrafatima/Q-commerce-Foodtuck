@@ -27,7 +27,7 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-  const { slug } = params;
+ 
   const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
