@@ -1,8 +1,7 @@
 "use client";
 
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
-import React, { createContext, useState, useContext, ReactNode, useEffect, useRef } from "react";
-import toast from "react-hot-toast";
+import React, { createContext, useState, useContext, ReactNode, useEffect } from "react";
 
 interface CartItem {
   description: string;
@@ -26,7 +25,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const toastRef = useRef<Record<string, boolean>>({}); // Prevent duplicate toasts
+  const [lastAddedItem, setLastAddedItem] = useState<CartItem | null>(null);
 
   // ✅ Load cart from local storage
   useEffect(() => {
@@ -48,7 +47,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       localStorage.removeItem("cart");
     }
   }, [cart]);
-  const [lastAddedItem, setLastAddedItem] = useState<CartItem | null>(null);
 
   const addToCart = (item: CartItem) => {
     setCart((prev) => {
@@ -69,11 +67,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // ✅ Set last added item outside state update
     setLastAddedItem(item);
   };
-  
-
-  
-  
-  
 
   // ✅ Update quantity of an item
   const updateQuantity = (id: string, quantity: number) => {
