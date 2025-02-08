@@ -3,15 +3,11 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import AddToCartButton from "@/app/component/AddToCartButton/AddToCartButton";
 import Counter from "@/app/component/counter";
-import { FaHeart, FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { FaHeart, FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaStar, FaRegStar } from "react-icons/fa";
 import Link from "next/link";
+import ProjectStatus from "@/app/public/Project Status.png"; // If possible, consider renaming to remove spaces
 
-import { FaStar, FaRegStar } from "react-icons/fa";
-import ProjectStatus from "@/app/public/Project Status.png";
-
-
-
-// Define additional types
+// Define your additional types
 type Review = {
   user: string;
   comment: string;
@@ -26,8 +22,10 @@ type RelatedItem = {
   slug: { current: string };
 };
 
-// Use inline type for the parameter to match Next.js's expectations
-export default async function Page({ params }: { params: { slug: string } }) {
+// Explicitly specify the return type as Promise<JSX.Element>
+export default async function Page(
+  { params }: { params: { slug: string } }
+): Promise<JSX.Element> {
   const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
@@ -50,7 +48,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
   });
 
   const averageRating = food.reviews?.length
-    ? food.reviews.reduce((acc: number, review: { rating: number }) => acc + review.rating, 0) / food.reviews.length
+    ? food.reviews.reduce(
+        (acc: number, review: { rating: number }) => acc + review.rating,
+        0
+      ) / food.reviews.length
     : 0;
 
   return (
