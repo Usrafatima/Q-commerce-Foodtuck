@@ -1,5 +1,4 @@
 import { client } from "@/sanity/lib/client";
-import { GetServerSideProps } from "next";
 
 type FoodItem = {
   _id: string;
@@ -14,7 +13,6 @@ interface CategoryPageProps {
   };
 }
 
-// ✅ Fix: Ensure correct type for params
 export default async function CategoryPage({ params }: CategoryPageProps) {
   console.log("Params:", params); // Debugging the received params
 
@@ -54,4 +52,3 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     return <p>Error fetching data for this category.</p>;
   }
 }
-
