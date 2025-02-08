@@ -1,4 +1,3 @@
-import { GetServerSideProps } from "next";
 import { client } from "@/sanity/lib/client";
 
 type FoodItem = {
@@ -8,36 +7,11 @@ type FoodItem = {
   description: string;
 };
 
-interface CategoryPageProps {
-  category: string;
-  foods: FoodItem[];
-}
+export default async function CategoryPage({ params }: { params: { category: string } }) {
+  console.log("Params:", params);
 
-export default function CategoryPage({ category, foods }: CategoryPageProps) {
-  if (!category) return <p>Invalid category parameter.</p>;
-
-  return (
-    <div>
-      <h1>{category} Foods</h1>
-      {foods.length > 0 ? (
-        foods.map((food) => (
-          <div key={food._id}>
-            <h3>{food.name}</h3>
-            <p>{food.description}</p>
-          </div>
-        ))
-      ) : (
-        <p>No foods found in this category.</p>
-      )}
-    </div>
-  );
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const category = context.params?.category as string;
-
-  if (!category) {
-    return { notFound: true };
+  if (!params?.category || typeof params.category !== "string") {
+    return <p>Invalid category parameter.</p>;
   }
 
   const query = `*[_type == "food" && category == $category] {
@@ -48,11 +22,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }`;
 
   try {
-    const foods: FoodItem[] = await client.fetch(query, { category });
+    const foods: FoodItem[] = await client.fetch(query, { category: params.category });
 
-    return { props: { category, foods } };
+    if (foods.length === 0) {
+      return <p>No foods found in this category.</p>;
+    }
+
+    return (
+      <div>
+        <h1>{params.category} Foods</h1>
+        {foods.map((food) => (
+          <div key={food._id}>
+            <h3>{food.name}</h3>
+            <p>{food.description}</p>
+          </div>
+        ))}
+      </div>
+    );
   } catch (error) {
     console.error("Error fetching data:", error);
-    return { props: { category, foods: [] } };
+    return <p>Error fetching data for this category.</p>;
   }
-};
+}
