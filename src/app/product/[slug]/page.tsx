@@ -30,7 +30,7 @@ type PageProps = {
   };
 };
 
-const Page = async ({ params }: PageProps) => {
+const Page = async ({ params }: Awaited<PageProps> ) => {
   const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
