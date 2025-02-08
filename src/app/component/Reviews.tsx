@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState } from "react";
 
 type Review = {
@@ -7,8 +7,17 @@ type Review = {
   rating: number;
 };
 
-const ReviewSection = ({ food }: { food: any }) => {
-  const [newReview, setNewReview] = useState({ user: "", comment: "", rating: 0 });
+type FoodItem = {
+  name: string;
+  category: string;
+  description?: string;
+  price: number;
+  slug: string;
+  reviews?: Review[];
+};
+
+const ReviewSection = ({ food }: { food: FoodItem }) => {
+  const [newReview, setNewReview] = useState<Review>({ user: "", comment: "", rating: 0 });
   const [reviews, setReviews] = useState<Review[]>(food.reviews || []);
 
   const handleSubmit = (e: React.FormEvent) => {
