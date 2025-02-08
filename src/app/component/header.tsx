@@ -9,12 +9,22 @@ import Searchbar from "@/app/component/Searchbar";
 import FoodList from "@/app/component/FoodList";
 import { useCart } from "@/app/context/CartContext"; // ✅ Import Cart Context
 
+// Define FoodItem type
+type FoodItem = {
+  name: string;
+  category: string;
+  description: string;
+  price: number;
+  image: string;
+  slug: string;
+};
+
 export default function Header() {
   const [activePage, setActivePage] = useState("Home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [foodItems, setFoodItems] = useState<any[]>([]);
-  const [filteredFoods, setFilteredFoods] = useState<any[]>([]);
+  const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
+  const [filteredFoods, setFilteredFoods] = useState<FoodItem[]>([]);
 
   const { cart } = useCart(); // ✅ Get cart data
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0); // ✅ Calculate total cart count
@@ -22,7 +32,7 @@ export default function Header() {
   useEffect(() => {
     async function fetchFoodData() {
       try {
-        const data = await client.fetch('*[_type == "food"]{name, category, description, price, image}');
+        const data: FoodItem[] = await client.fetch('*[_type == "food"]{name, category, description, price, image, slug}');
         setFoodItems(data);
         setFilteredFoods(data);
       } catch (error) {
@@ -55,9 +65,9 @@ export default function Header() {
     <div className="bg-black">
       <div className="flex items-center justify-between px-6 py-5 lg:px-40">
         <Link href={"/"}>
-        <p className="text-[#FF9F0D] text-2xl font-bold">
-          Food<span className="text-white">tuck</span>
-        </p>
+          <p className="text-[#FF9F0D] text-2xl font-bold">
+            Food<span className="text-white">tuck</span>
+          </p>
         </Link>
 
         {/* Mobile Navigation */}
@@ -109,7 +119,7 @@ export default function Header() {
               )}
             </Link>
             <Link href="/signin">
-              <FaUser size={24} color="#FF9F0D"  />
+              <FaUser size={24} color="#FF9F0D" />
             </Link>
           </div>
         </div>
