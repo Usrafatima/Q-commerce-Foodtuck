@@ -11,7 +11,7 @@ import ProjectStatus from "@/app/public/Project Status.png";
 
 // Define the type for props
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 type Review = {
@@ -28,8 +28,8 @@ type RelatedItem = {
   slug: { current: string };
 };
 
-const Page = async ({ params }: Props) => {
-  const query = `*[_type=='food' && slug.current == $slug] {
+const Page = async ({ params }: { params: { slug: string } }) => {
+const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
     "reviews": reviews[]{rating, comment, user},
