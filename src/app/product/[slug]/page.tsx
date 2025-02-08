@@ -26,12 +26,20 @@ type RelatedItem = {
   slug: { current: string };
 };
 
+// Define a type for your Sanity image
+interface SanityImage {
+  asset: {
+    _ref: string;
+    _type: string;
+  };
+}
+
 interface Food {
   _id: string;
   name: string;
   price: number;
   tags: string[];
-  image: any; // Adjust type if needed
+  image: SanityImage; // replaced "any" with a specific type
   description: string;
   available: boolean;
   category: string;
