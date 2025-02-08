@@ -6,7 +6,7 @@ import Image from "next/image";
 import client from "@/sanity/lib/client";
 import CategoryBox from "@/app/component/categorybox";
 
-const categories = ["All", "Desi", "Chinese", "Fast Food", "Drinks"];
+
 interface FoodItem {
   _id: string;
   name: string;
@@ -56,27 +56,9 @@ const [selectedCategory, setSelectedCategory] = useState<string>("All");
     fetchFoods();
   }, []);
 
-  useEffect(() => {
-    console.log("Selected Category:", selectedCategory);
-    console.log("All Foods Data:", foods);
-
-    if (selectedCategory === "All") {
-      setFilteredFoods(foods);
-    } else {
-      const filtered = foods.filter((food) =>
-        Array.isArray(food.category)
-          ? food.category.includes(selectedCategory)
-          : (food.category?.toLowerCase() || "") === selectedCategory.toLowerCase()
-      );
-
-      console.log("Filtered Foods:", filtered);
-      setFilteredFoods(filtered);
-    }
-  }, [selectedCategory, foods]); //
-
   return (
     <div className="bg-white p-6 mt-5">
-      <CategoryBox categories={categories} setSelectedCategory={setSelectedCategory} />
+     
       <h1 className="text-2xl font-bold mb-6 text-center">Food</h1>
 
       {loading && <p>Loading food items...</p>}
