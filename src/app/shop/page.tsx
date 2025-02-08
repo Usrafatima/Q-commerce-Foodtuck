@@ -7,11 +7,22 @@ import client from "@/sanity/lib/client";
 import CategoryBox from "@/app/component/categorybox";
 
 const categories = ["All", "Desi", "Chinese", "Fast Food", "Drinks"];
+interface FoodItem {
+  _id: string;
+  name: string;
+  price: number;
+  description: string;
+  tags: string[];
+  available: boolean;
+  category: string | string[];
+  imageUrl: string;
+  slug: string;
+}
 
 const Shop = () => {
-  const [foods, setFoods] = useState<any[]>([]);
-  const [filteredFoods, setFilteredFoods] = useState<any[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+   const [foods, setFoods] = useState<FoodItem[]>([]);
+  const [filteredFoods, setFilteredFoods] = useState<FoodItem[]>([]);
+const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
