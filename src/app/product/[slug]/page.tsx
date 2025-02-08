@@ -3,17 +3,18 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import AddToCartButton from "@/app/component/AddToCartButton/AddToCartButton";
 import Counter from "@/app/component/counter";
-import { FaHeart, FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaStar, FaRegStar } from "react-icons/fa";
+import { FaHeart, FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import Link from "next/link";
 
+import { FaStar, FaRegStar } from "react-icons/fa";
+import ProjectStatus from "@/app/public/Project Status.png";
 
 type Review = {
   user: string;
   comment: string;
-  rating: number;
+  rating: number; 
 };
-
-type RelatedItem = {
+  type RelatedItem = {
   _id: string;
   name: string;
   price: number;
@@ -22,18 +23,19 @@ type RelatedItem = {
 };
 
 interface PageProps {
-  params: {
-    slug: string;
-  };
-};
+  params: { slug: string };
+}
 
 const Page = async ({ params }: PageProps) => {
+  const { slug } = params;
   const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
     "reviews": reviews[]{rating, comment, user},
     slug
   }[0]`;
+
+
 
   const food = await client.fetch(query, { slug: params.slug });
 
