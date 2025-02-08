@@ -25,7 +25,6 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [lastAddedItem, setLastAddedItem] = useState<CartItem | null>(null);
 
   // ✅ Load cart from local storage
   useEffect(() => {
@@ -63,9 +62,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   
       return updatedCart;
     });
-  
-    // ✅ Set last added item outside state update
-    setLastAddedItem(item);
   };
 
   // ✅ Update quantity of an item
@@ -98,4 +94,5 @@ export const useCart = () => {
   if (!context) throw new Error("useCart must be used within a CartProvider");
   return context;
 };
+
 
