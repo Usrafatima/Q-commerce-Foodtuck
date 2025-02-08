@@ -26,9 +26,7 @@ type RelatedItem = {
   imageUrl: string;
   slug: { current: string };
 };
-
 const Page = async ({ params }: { params: { slug: string } }) => {
-
 const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
