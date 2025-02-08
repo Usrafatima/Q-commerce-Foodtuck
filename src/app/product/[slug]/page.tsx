@@ -5,6 +5,7 @@ import AddToCartButton from "@/app/component/AddToCartButton/AddToCartButton";
 import Counter from "@/app/component/counter";
 import { FaHeart, FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaStar, FaRegStar } from "react-icons/fa";
 import Link from "next/link";
+import { Metadata } from "next";
 
 type Review = {
   user: string;
@@ -20,7 +21,7 @@ type RelatedItem = {
   slug: { current: string };
 };
 
-type PageProps = {
+interface PageProps {
   params: {
     slug: string;
   };
