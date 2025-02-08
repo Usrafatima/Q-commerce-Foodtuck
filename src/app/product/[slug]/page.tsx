@@ -10,13 +10,12 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import ProjectStatus from "@/app/public/Project Status.png";
 
 
-
-type Review = {
+pe Review = {
   user: string;
   comment: string;
   rating: number; 
 };
-  type RelatedItem = {
+type RelatedItem = {
   _id: string;
   name: string;
   price: number;
@@ -30,7 +29,11 @@ type PageProps = {
   };
 };
 
-const Page = async ({ params }: Awaited<PageProps> ) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  if (!params?.slug) {
+    return { notFound: true };
+  }
+
   const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
@@ -40,7 +43,7 @@ const Page = async ({ params }: Awaited<PageProps> ) => {
 
   const food = await client.fetch(query, { slug: params.slug });
 
-  if (!food) return <div className="text-center text-red-500">Product not found</div>;
+  if (!food) return { notFound: true };
 
   const relatedItemsQuery = `*[_type == 'food' && category == $category && slug.current != $slug] {
     _id, name, price, image, "imageUrl": image.asset->url, slug
@@ -48,10 +51,15 @@ const Page = async ({ params }: Awaited<PageProps> ) => {
 
   const relatedItems = await client.fetch(relatedItemsQuery, { category: food.category, slug: food.slug.current });
 
-  const averageRating = food.reviews?.length
+  return { 
+    props: { food, relatedItems } 
+  };
+};
+
+const Page = ({ food, relatedItems }: { food: any; relatedItems: any }) => {
+  const averageRating = food.reviews?.length > 0
     ? food.reviews.reduce((acc: number, review: { rating: number }) => acc + review.rating, 0) / food.reviews.length
     : 0;
-
   return (
     <div className="bg-white">
       <div className="container mx-auto px-4 lg:px-16 py-8">
