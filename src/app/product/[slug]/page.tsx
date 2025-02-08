@@ -9,7 +9,9 @@ import Link from "next/link";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import ProjectStatus from "@/app/public/Project Status.png";
 
-
+type Props = {
+  params: { slug: string }; 
+};
 
 type Review = {
   user: string;
@@ -24,7 +26,8 @@ type RelatedItem = {
   imageUrl: string;
   slug: { current: string };
 };
-const Page = async ({ params }: { params: { slug: string } }) => {
+
+const Page = async ({ params }: Props) => {
 const query = `*[_type=='food' && slug.current == $slug] {
     _id, name, price, tags, image, description, available, category,
     "imageUrl": image.asset->url,
