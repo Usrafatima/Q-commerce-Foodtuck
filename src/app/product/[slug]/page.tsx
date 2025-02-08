@@ -9,7 +9,7 @@ import Link from "next/link";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import ProjectStatus from "@/app/public/Project Status.png";
 
-import { GetServerSideProps } from "next";
+
 
 type Review = {
   user: string;
