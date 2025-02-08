@@ -1,5 +1,5 @@
 import Image from "next/image";
-import hero from './public/hero.png';
+
 import check from './public/check.png';
 import pic1 from './public/pic1.svg';
 import pic2 from './public/pic2.svg';
