@@ -3,12 +3,10 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import AddToCartButton from "@/app/component/AddToCartButton/AddToCartButton";
 import Counter from "@/app/component/counter";
-import { FaHeart, FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
+import { FaHeart, FaFacebook, FaInstagram, FaTwitter, FaYoutube, FaStar, FaRegStar } from "react-icons/fa";
 import Link from "next/link";
-
-import { FaStar, FaRegStar } from "react-icons/fa";
-import ProjectStatus from "@/app/public/Project Status.png";
-
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 type Review = {
   user: string;
@@ -23,52 +21,66 @@ type RelatedItem = {
   slug: { current: string };
 };
 
-type PageProps = {
-  params: {
-    slug: string;
-  };
+type FoodData = {
+  _id: string;
+  name: string;
+  price: number;
+  tags: string[];
+  imageUrl: string;
+  description: string;
+  available: boolean;
+  category: string;
+  reviews: Review[];
+  slug: { current: string };
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  if (!params?.slug) {
-    return { notFound: true };
-  }
-
-  const query = `*[_type=='food' && slug.current == $slug] {
-    _id, name, price, tags, image, description, available, category,
-    "imageUrl": image.asset->url,
-    "reviews": reviews[]{rating, comment, user},
-    slug
-  }[0]`;
-
-  const food = await client.fetch(query, { slug: params.slug });
-
-  if (!food) return { notFound: true };
-
-  const relatedItemsQuery = `*[_type == 'food' && category == $category && slug.current != $slug] {
-    _id, name, price, image, "imageUrl": image.asset->url, slug
-  }`;
-
-  const relatedItems = await client.fetch(relatedItemsQuery, { category: food.category, slug: food.slug.current });
-
-  return { 
-    props: { food, relatedItems } 
-  };
-};
-
-const Page = ({ food, relatedItems }: { food: any; relatedItems: any }) => {
+const Page = () => {
+  const { slug } = useParams();
+  const [food, setFood] = useState<FoodData | null>(null);
+  const [relatedItems, setRelatedItems] = useState<RelatedItem[]>([]);
+  
+  useEffect(() => {
+    if (!slug) return;
+    
+    const fetchData = async () => {
+      const query = `*[_type=='food' && slug.current == $slug] {
+        _id, name, price, tags, image, description, available, category,
+        "imageUrl": image.asset->url,
+        "reviews": reviews[]{rating, comment, user},
+        slug
+      }[0]`;
+      
+      const foodData = await client.fetch(query, { slug });
+      if (foodData) {
+        setFood(foodData);
+        
+        const relatedItemsQuery = `*[_type == 'food' && category == $category && slug.current != $slug] {
+          _id, name, price, image, "imageUrl": image.asset->url, slug
+        }`;
+        
+        const relatedItemsData = await client.fetch(relatedItemsQuery, { category: foodData.category, slug: foodData.slug.current });
+        setRelatedItems(relatedItemsData);
+      }
+    };
+    
+    fetchData();
+  }, [slug]);
+  
+  if (!food) return <p>Loading...</p>;
+  
   const averageRating = food.reviews?.length > 0
     ? food.reviews.reduce((acc: number, review: { rating: number }) => acc + review.rating, 0) / food.reviews.length
     : 0;
+
   return (
     <div className="bg-white">
       <div className="container mx-auto px-4 lg:px-16 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Image Section */}
           <div className="flex justify-center overflow-hidden">
-            {food.image && (
+            {food.imageUrl && (
               <Image
-                src={urlFor(food.image).url()}
+                src={food.imageUrl}
                 alt={food.name}
                 width={500}
                 height={500}
@@ -113,37 +125,6 @@ const Page = ({ food, relatedItems }: { food: any; relatedItems: any }) => {
               />
             </div>
             <hr className="mt-3" />
-
-            {/* Wishlist and Compare Buttons */}
-            <div className="flex flex-row gap-3 mt-2">
-              <FaHeart className="mt-1 text-[#4F4F4F]" />
-              <p className="text-[#4F4F4F]">Add To Wishlist</p>
-              <div className="flex flex-row gap-2">
-                <Image src={ProjectStatus} alt="Project Status" className="mt-1 text-[#4F4F4F]" />
-                <p className="text-[#4F4F4F]">Compare</p>
-              </div>
-            </div>
-
-            {/* Category and Tags */}
-            <div className="flex flex-row gap-3 mt-1">
-              <p>Category:</p>
-              <p className="text-gray-600">{food.category}</p>
-            </div>
-            <div className="flex flex-row gap-3 mt-1">
-              <p>Tags:</p>
-              <p className="text-gray-600">{food.tags}</p>
-            </div>
-
-            {/* Social Media Share */}
-            <div className="flex flex-row gap-5 mt-1">
-              <p>Share:</p>
-              <div className="flex flex-row gap-3 text-2xl">
-                <FaFacebook />
-                <FaInstagram />
-                <FaYoutube />
-                <FaTwitter />
-              </div>
-            </div>
           </div>
         </div>
 
@@ -173,31 +154,17 @@ const Page = ({ food, relatedItems }: { food: any; relatedItems: any }) => {
           ) : (
             <p className="text-gray-600">No reviews yet. Be the first to review!</p>
           )}
-          </div>
-              {relatedItems.length > 0 ? (
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-    {relatedItems.map((item: RelatedItem) => (
-      <div key={item._id} className="border p-3 rounded-lg shadow-md">
-        <Link href={`/product/${item.slug.current}`}>
-          <Image
-            src={item.imageUrl || "/default-image.jpeg"}
-            alt={item.name}
-            width={200}
-            height={200}
-            className="w-full h-36 sm:h-40 md:h-48 object-cover rounded-md"
-          />
-          <h3 className="text-lg font-semibold mt-2">{item.name}</h3>
-          <p className="text-gray-600 text-sm">${item.price}</p>
-        </Link>
-      </div>
-    ))}
-  </div>
-) : (
-  <p>No related items found.</p>
-)}
+        </div>
+
+        {/* Related Items Section */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Related Items</h2>
+          {/* Related Items Content */}
+        </div>
       </div>
     </div>
   );
 };
 
 export default Page;
+
